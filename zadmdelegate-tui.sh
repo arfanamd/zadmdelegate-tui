@@ -43,7 +43,7 @@ _zmprovOut=$(mktemp "${TMPDIR:-/tmp}/zmprovOut.XXXXXX")
 [[ ! -f "${_zmprovOut}" ]] && { exerr "Can't create zmprovOut temporary file"; }
 
 # Remove temporary file on exit
-trap '{ command rf -f "${_dialogOut}" "${_zmprovOut}"; }'
+trap '{ command rf -f "${_dialogOut}" "${_zmprovOut}"; }' EXIT
 
 # 
 _retval=0
