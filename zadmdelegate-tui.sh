@@ -69,7 +69,7 @@ selectGroups() {  # {{{
         --no-items --checklist \
 "Select the admin groups to which you want to grant or revoke access\n
 for one or more rules. Only DL with zimbraIsAdminGroup attribute set\n
-to TRUE that gets listed in here.\n\n Choose the groups:" ${_box_h} ${_box_w} 0 \
+to TRUE that gets listed in here.\n\n Choose the groups:" ${_box_h} ${_box_w} \
     $(for ((i = 0; i < ${#groups[@]}; ++i)); do printf "${groups[i]} off "; done) \
     2 > "${_dialogOut}"
 
