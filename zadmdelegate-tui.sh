@@ -18,6 +18,7 @@ chkprg() { command type -p "${1}"; }
 [[ ! $(chkprg mktemp) ]] && { exerr "You don't have mktemp installed"; }
 [[ ! $(chkprg ldapsearch) ]] && { exerr "You don't have ldapsearch installed"; }
 [[ ! $(chkprg dialog) ]] && { exerr "You don't have dialog installed"; }
+[[ ! $(chkprg tput) ]] && { exerr "You don't have tput installed"; }
 [[ "${USER}" != "zimbra" ]] && { exerr "Please run as zimbra!"; }
 
 command printf "Please wait...\n"
@@ -45,11 +46,15 @@ _zmprovOut=$(mktemp "${TMPDIR:-/tmp}/zmprovOut.XXXXXX")
 trap '{ command rf -f "${_dialogOut}" "${_zmprovOut}"; }'
 
 # Initialize dialog
+_box_w=$[ $(tput cols) / 2 ]
+_box_h=$[ $(tput lines) / 2 ]
 [[ -f "${PWD}/zadmdelegate-tui.rc" ]] && { export DIALOGRC="${PWD}/zadmdelegate-tui.rc"; }
 export DIALOGTTY=1
 
+# show message using dialog
+info() { command dialog --clear --msgbox "${1}" ${_box_h} ${_box_w}; }
 
 # test
-command dialog --clear --msgbox "testing dialog" 0 0
+info "testing dialog"
 
 # vim:ft=bash:ts=4:sw=4:et
