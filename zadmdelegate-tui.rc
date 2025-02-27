@@ -12,49 +12,136 @@
 # vile: confmode
 # Run-time config file for dialog used in zadmdelegate-tui.sh
 
+# Set aspect-ration.
 aspect = 0
-border2_color = dialog_color
-border_color = screen_color
-button_active_color = (BLUE,BLACK,ON)
-button_inactive_color = dialog_color
-button_key_active_color = button_active_color
-button_key_inactive_color = button_inactive_color
-button_label_active_color = button_active_color
-button_label_inactive_color = button_inactive_color
-check_color = dialog_color
-check_selected_color = button_active_color
-darrow_color = dialog_color
-dialog_color = screen_color
-form_active_text_color = button_active_color
-form_item_readonly_color = dialog_color
-form_text_color = dialog_color
-gauge_color = dialog_color
-inputbox_border2_color = dialog_color
-inputbox_border_color = dialog_color
-inputbox_color = dialog_color
-item_color = dialog_color
-item_selected_color = button_active_color
-itemhelp_color = dialog_color
-menubox_border2_color = dialog_color
-menubox_border_color = border_color
-menubox_color = dialog_color
-position_indicator_color = title_color
-screen_color = (WHITE,BLACK,OFF)
-searchbox_border2_color = dialog_color
-searchbox_border_color = border_color
-searchbox_color = dialog_color
-searchbox_title_color = title_color
+
+# Set separator (for multiple widgets output).
 separate_widget = ""
-shadow_color = (BLACK,WHITE,ON)
+
+# Set tab-length (for textbox tab-conversion).
 tab_len = 0
-tag_color = title_color
-tag_key_color = button_key_inactive_color
-tag_key_selected_color = button_label_active_color
-tag_selected_color = button_label_active_color
-title_color = screen_color
-uarrow_color = dialog_color
-use_colors = ON
-use_shadow = ON
+
+# Make tab-traversal for checklist, etc., include the list.
 visit_items = OFF
+
+# Shadow dialog boxes? This also turns on color.
+use_shadow = ON
+
+# Turn color support ON or OFF
+use_colors = ON
+
+# Screen color
+screen_color = (WHITE,BLACK,OFF)
+
+# Shadow color
+shadow_color = (BLACK,WHITE,ON)
+
+# Dialog box color
+dialog_color = screen_color
+
+# Dialog box title color
+title_color = screen_color
+
+# Dialog box border color
+border_color = screen_color
+
+# Active button color
+button_active_color = (BLUE,BLACK,ON)
+
+# Inactive button color
+button_inactive_color = dialog_color
+
+# Active button key color
+button_key_active_color = button_active_color
+
+# Inactive button key color
+button_key_inactive_color = button_inactive_color
+
+# Active button label color
+button_label_active_color = button_active_color
+
+# Inactive button label color
+button_label_inactive_color = button_inactive_color
+
+# Input box color
+inputbox_color = dialog_color
+
+# Input box border color
+inputbox_border_color = dialog_color
+
+# Search box color
+searchbox_color = dialog_color
+
+# Search box title color
+searchbox_title_color = title_color
+
+# Search box border color
+searchbox_border_color = border_color
+
+# File position indicator color
+position_indicator_color = title_color
+
+# Menu box color
+menubox_color = dialog_color
+
+# Menu box border color
+menubox_border_color = border_color
+
+# Item color
+item_color = dialog_color
+
+# Selected item color
+item_selected_color = button_active_color
+
+# Tag color
+tag_color = title_color
+
+# Selected tag color
+tag_selected_color = button_label_active_color
+
+# Tag key color
+tag_key_color = button_key_inactive_color
+
+# Selected tag key color
+tag_key_selected_color = button_label_active_color
+
+# Check box color
+check_color = dialog_color
+
+# Selected check box color
+check_selected_color = button_active_color
+
+# Up arrow color
+uarrow_color = dialog_color
+
+# Down arrow color
+darrow_color = dialog_color
+
+# Item help-text color
+itemhelp_color = dialog_color
+
+# Active form text color
+form_active_text_color = button_active_color
+
+# Form text color
+form_text_color = dialog_color
+
+# Readonly form item color
+form_item_readonly_color = dialog_color
+
+# Dialog box gauge color
+gauge_color = dialog_color
+
+# Dialog box border2 color
+border2_color = dialog_color
+
+# Input box border2 color
+inputbox_border2_color = dialog_color
+
+# Search box border2 color
+searchbox_border2_color = dialog_color
+
+# Menu box border2 color
+menubox_border2_color = dialog_color
 
 # vim:ft=conf
