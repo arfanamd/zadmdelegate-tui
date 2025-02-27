@@ -54,7 +54,5 @@ export DIALOGTTY=1
 # show message using dialog
 info() { command dialog --clear --msgbox "${1}" ${_box_h} ${_box_w}; }
 
-# test
-info "testing dialog"
 
 # vim:ft=bash:ts=4:sw=4:et
