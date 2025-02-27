@@ -45,6 +45,10 @@ _zmprovOut=$(mktemp "${TMPDIR:-/tmp}/zmprovOut.XXXXXX")
 # Remove temporary file on exit
 trap '{ command rf -f "${_dialogOut}" "${_zmprovOut}"; }'
 
+# 
+_retval=0
+_valret=""
+
 # Initialize dialog
 _box_w=$[ $(tput cols) / 2 ]
 _box_h=$[ $(tput lines) / 2 ]
@@ -53,6 +57,25 @@ export DIALOGTTY=1
 
 # show message using dialog
 info() { command dialog --clear --msgbox "${1}" ${_box_h} ${_box_w}; }
+
+selectGroups() {  # {{{
+    local groups=($( \
+        command ldapsearch -H ${_zldap_h} -LLL -x -D ${_zldap_u} -w ${_zldap_p} \
+        '(&(objectClass=zimbraDistributionList)(zimbraIsAdminGroup=TRUE))' mail \
+        | command sed -e '/^$/d;/^dn:/d;s/^.\+: //' \
+    ))
+
+    command dialog --clear \
+        --no-items --checklist \
+"Select the admin groups to which you want to grant or revoke access\n
+for one or more rules. Only DL with zimbraIsAdminGroup attribute set\n
+to TRUE that gets listed in here.\n\n Choose the groups:" ${_box_h} ${_box_w} 0 \
+    $(for ((i = 0; i < ${#groups[@]}; ++i)); do printf "${groups[i]} off "; done) \
+    2 > "${_dialogOut}"
+
+    _retval=${?}
+    command mapfile -d ' ' -t _valret < "${_dialogOut}"
+}  # }}}
 
 
 # vim:ft=bash:ts=4:sw=4:et
