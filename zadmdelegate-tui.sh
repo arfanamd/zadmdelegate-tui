@@ -65,6 +65,8 @@ selectGroups() {  # {{{
         | command sed -e '/^$/d;/^dn:/d;s/^.\+: //' \
     ))
 
+    # TODO: Make users can only select one group at a time.
+    # ; Use "menu" instead of "checklist" option for dialog box. 
     command dialog --clear \
         --no-items --checklist \
 "Select the admin groups to which you want to grant or revoke access\n
