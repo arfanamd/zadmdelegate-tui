@@ -79,5 +79,22 @@ to TRUE that gets listed in here.\n\n Choose the groups:" ${_box_h} ${_box_w} 0 
     command mapfile -d ' ' -t _valret < "${_dialogOut}"
 }  # }}}
 
+selectDomains() {  # {{{
+    local group="${1}"
+    local domains=($(\
+        command ldapsearch -H ${_zldap_h} -LLL -x -D ${_zldap_u} -w ${_zldap_p} \
+        '(&(objectClass=dcObject))' zimbraDomainName \
+        | command sed -e '/^$/d;/^dn:/d;s/^.\+: //' \
+    ))
+
+    command dialog --clear \
+        --no-items --checklist \
+"select one or more target domain for group ${group}" ${_box_h} ${_box_w} 0 \
+        $(for ((i = 0; i < ${#domains[@]}; ++i)); do printf "${domains[i]} off"; done) \
+        2> "${_dialogOut}"
+
+    _retval=${?}
+    command mapfile -d ' ' -t _valret < "${_dialogOut}"
+}  # }}}
 
 # vim:ft=bash:ts=4:sw=4:et
