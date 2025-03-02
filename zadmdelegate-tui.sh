@@ -97,4 +97,25 @@ selectDomains() {  # {{{
     command mapfile -d ' ' -t _valret < "${_dialogOut}"
 }  # }}}
 
+selectRights() {  # {{{
+    local group="${1}"
+    command dialog --clear --no-cancel \
+        --ok-label "GRANT" --extra-button --extra-label "REVOKE" \
+        --checklist "select one or more rights for group ${group}" ${_box_h} ${_box_w} 0 \
+        "0"  "View domain" "off" \
+        "1"  "View class of services" "off" \
+        "2"  "View accounts, aliases, and resources" "off" \
+        "3"  "Manage domain" "off" \
+        "4"  "Manage class of services" "off" \
+        "5"  "Manage accounts, aliases, and resources" "off" \
+        "6"  "Can enable or disable account's features" "off" \
+        "7"  "Can enable or disable account's zimlets" "off" \
+        "8"  "Can view account" "off" \
+        "9"  "Can change account's quota" "off" \
+        "10" "Global search and download (export)" "off" \
+        2> "${_dialogOut}"
+
+    _retval=${?}
+    command mapfile -d ' ' -t _valret < "${_dialogOut}"
+}  # }}}
 # vim:ft=bash:ts=4:sw=4:et
