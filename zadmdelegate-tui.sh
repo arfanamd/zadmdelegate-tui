@@ -24,7 +24,7 @@ chkprg() { command type -p "${1}"; }
 command printf "Please wait...\n"
 
 # When querying data, we aim to minimize the use of any zimbra command
-# due to performance concerns. Instead, we’ll utilize the ldapsearch
+# due to performance concerns. Instead, we will utilize the ldapsearch
 # command to retrieve the necessary data.
 _zldapprop=($(command zmlocalconfig -m nokey -s ldap_master_url zimbra_ldap_userdn zimbra_ldap_password))
 
