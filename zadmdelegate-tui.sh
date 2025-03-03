@@ -90,7 +90,7 @@ selectDomains() {  # {{{
     command dialog --clear \
         --no-items --checklist \
 "select one or more target domain for group ${group}" ${_box_h} ${_box_w} 0 \
-        $(for ((i = 0; i < ${#domains[@]}; ++i)); do printf "${domains[i]} off"; done) \
+        $(for ((i = 0; i < ${#domains[@]}; ++i)); do printf "${domains[i]} off "; done) \
         2> "${_dialogOut}"
 
     _retval=${?}
