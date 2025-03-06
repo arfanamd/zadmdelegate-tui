@@ -45,14 +45,26 @@ _zmprovOut=$(mktemp "${TMPDIR:-/tmp}/zmprovOut.XXXXXX")
 # Remove temporary file on exit
 trap '{ command rm -f "${_dialogOut}" "${_zmprovOut}"; }' EXIT
 
+# Log file
+_programLog=$(mktemp "${TMPDIR:-/tmp}/programLog.XXXXXX")
+[[ ! -f "${_programLog}" ]] && { exerr "Can't create programLog file"; }
+
 # 
 _retval=0
-_valret=""
+_rights=""
+_group=""
+_domains=""
 
 # Initialize dialog
-_box_w=$[ $(tput cols) / 2 ]
-_box_h=$[ $(tput lines) / 2 ]
-[[ -f "${PWD}/zadmdelegate-tui.rc" ]] && { export DIALOGRC="${PWD}/zadmdelegate-tui.rc"; }
+_box_w=$(tput cols)
+_box_h=$(tput lines)
+
+# TODO: check minimum screen size
+
+[[ -f "${PWD}/zadmdelegate-tui.rc" ]] && {
+    OLD_DIALOGRC="${DIALOGRC}"
+    export DIALOGRC="${PWD}/zadmdelegate-tui.rc"
+}
 export DIALOGTTY=1
 
 # show message using dialog
@@ -68,11 +80,11 @@ selectGroups() {  # {{{
     # TODO: Make users can only select one group at a time.
     # ; Use "menu" instead of "checklist" option for dialog box. 
     command dialog --clear \
-        --no-items --checklist \
+        --no-tags --no-items --menu \
 "Select the admin groups to which you want to grant or revoke access\n
 for one or more rules. Only DL with zimbraIsAdminGroup attribute set\n
 to TRUE that gets listed in here.\n\n Choose the groups:" ${_box_h} ${_box_w} 0 \
-    $(for ((i = 0; i < ${#groups[@]}; ++i)); do printf "${groups[i]} off "; done) \
+    ${groups[@]}
     2> "${_dialogOut}"
 
     _retval=${?}
@@ -118,4 +130,5 @@ selectRights() {  # {{{
     _retval=${?}
     command mapfile -d ' ' -t _valret < "${_dialogOut}"
 }  # }}}
+
 # vim:ft=bash:ts=4:sw=4:et
