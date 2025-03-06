@@ -70,26 +70,21 @@ export DIALOGTTY=1
 # show message using dialog
 info() { command dialog --clear --msgbox "${1}" ${_box_h} ${_box_w}; }
 
-selectGroups() {  # {{{
+selectAdministratorGroup() { # {{{
     local groups=($( \
         command ldapsearch -H ${_zldap_h} -LLL -x -D ${_zldap_u} -w ${_zldap_p} \
         '(&(objectClass=zimbraDistributionList)(zimbraIsAdminGroup=TRUE))' mail \
         | command sed -e '/^$/d;/^dn:/d;s/^.\+: //' \
     ))
 
-    # TODO: Make users can only select one group at a time.
-    # ; Use "menu" instead of "checklist" option for dialog box. 
-    command dialog --clear \
-        --no-tags --no-items --menu \
-"Select the admin groups to which you want to grant or revoke access\n
-for one or more rules. Only DL with zimbraIsAdminGroup attribute set\n
-to TRUE that gets listed in here.\n\n Choose the groups:" ${_box_h} ${_box_w} 0 \
-    ${groups[@]}
-    2> "${_dialogOut}"
+    command dialog --clear --no-items --menu "\
+Select the admin groups to which you want to grant or revoke access for one or more rules. \
+Only DL with zimbraIsAdminGroup attribute set to TRUE that gets listed in here. \
+\n\n Choose the groups:" ${_box_h} ${_box_w} ${#groups[@]} ${groups[@]} 2> "${_dialogOut}"
 
     _retval=${?}
-    command mapfile -d ' ' -t _valret < "${_dialogOut}"
-}  # }}}
+    command mapfile -d ' ' -t _group < "${_dialogOut}"
+} # }}}
 
 selectDomains() {  # {{{
     local group="${1}"
