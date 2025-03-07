@@ -86,23 +86,21 @@ Only DL with zimbraIsAdminGroup attribute set to TRUE that gets listed in here. 
     command mapfile -d ' ' -t _group < "${_dialogOut}"
 } # }}}
 
-selectDomains() {  # {{{
-    local group="${1}"
+selectTargetDomains() { # {{{
     local domains=($(\
         command ldapsearch -H ${_zldap_h} -LLL -x -D ${_zldap_u} -w ${_zldap_p} \
         '(&(objectClass=dcObject))' zimbraDomainName \
         | command sed -e '/^$/d;/^dn:/d;s/^.\+: //' \
     ))
 
-    command dialog --clear \
-        --no-items --checklist \
-"select one or more target domain for group ${group}" ${_box_h} ${_box_w} 0 \
-        $(for ((i = 0; i < ${#domains[@]}; ++i)); do printf "${domains[i]} off "; done) \
-        2> "${_dialogOut}"
+    command dialog --clear --no-items --checklist \
+    "You can select one or more target domain for ${_group}" ${_box_h} ${_box_w} ${#domains[@]} \
+    $(for ((i = 0; i < ${#domains[@]}; ++i)); do printf "${domains[i]} off "; done) \
+    2> "${_dialogOut}"
 
     _retval=${?}
-    command mapfile -d ' ' -t _valret < "${_dialogOut}"
-}  # }}}
+    command mapfile -d ' ' -t _domains < "${_dialogOut}"
+} # }}}
 
 selectRights() {  # {{{
     local group="${1}"
