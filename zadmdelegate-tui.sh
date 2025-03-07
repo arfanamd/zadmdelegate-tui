@@ -102,26 +102,29 @@ selectTargetDomains() { # {{{
     command mapfile -d ' ' -t _domains < "${_dialogOut}"
 } # }}}
 
-selectRights() {  # {{{
-    local group="${1}"
-    command dialog --clear --no-cancel \
-        --ok-label "GRANT" --extra-button --extra-label "REVOKE" \
-        --checklist "select one or more rights for group ${group}" ${_box_h} ${_box_w} 0 \
-        "0"  "View domain" "off" \
-        "1"  "View class of services" "off" \
-        "2"  "View accounts, aliases, and resources" "off" \
-        "3"  "Manage domain" "off" \
-        "4"  "Manage class of services" "off" \
-        "5"  "Manage accounts, aliases, and resources" "off" \
-        "6"  "Can enable or disable account's features" "off" \
-        "7"  "Can enable or disable account's zimlets" "off" \
-        "8"  "Can view account" "off" \
-        "9"  "Can change account's quota" "off" \
-        "10" "Global search and download (export)" "off" \
+selectRights() { # {{{
+    local type_of_rights=(
+        'View_domain'
+        'View_class_of_services'
+        'View_accounts,_aliases,_and_resources'
+        'Manage_domain'
+        'Manage_class_of_services'
+        'Manage_accounts,_aliases,_and_resources'
+        'Can_enable_or_disable_accounts_features'
+        'Can_enable_or_disable_accounts_zimlets'
+        'Can_view_account'
+        'Can_change_accounts_quota'
+        'Global_search_and_download_(export)'
+    )
+
+    command dialog --clear --no-cancel --extra-button \
+        --ok-label "GRANT" --extra-label "REVOKE" --checklist \
+        "Select any rights for ${_group}:" ${_box_h} ${_box_w} ${#type_of_rights[@]} \
+        $(for ((i = 0; i < ${#type_of_rights[@]}; ++i)); do printf "${i} ${type_of_rights[i]} off "; done) \
         2> "${_dialogOut}"
 
-    _retval=${?}
-    command mapfile -d ' ' -t _valret < "${_dialogOut}"
-}  # }}}
+        _retval=${?}
+        command mapfile -d ' ' -t _rights < "${_dialogOut}"
+} # }}}
 
 # vim:ft=bash:ts=4:sw=4:et
