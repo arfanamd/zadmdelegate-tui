@@ -107,10 +107,10 @@ selectRights() { # {{{
         'View_Domain'
         'View_Class_of_services'
         'Manage_Domain'
+        'Manage_Class_of_services'
         'Manage_Account,_Aliases,_and_Resources'
         '>__Can_view_account'
         '>__Can_enable_or_disable_accounts_feature'
-        '>__Can_modify_accounts_quota#'
         'Manage_Distribution_List'
         'Global_Search_and_Download'
     )
@@ -187,6 +187,10 @@ ${grant} global grp ${_group} +viewAdminConsoleResourcesPropertiesTab
 ${grant} global grp ${_group} +listCos
 ${grant} global grp ${_group} +getCalendarResourceInfo
 ${grant} global grp ${_group} +getCos
+${grant} global grp ${_group} +listZimlet
+${grant} global grp ${_group} +getZimlet
+${grant} global grp ${_group} +listServer
+${grant} global grp ${_group} +getServer
 " >> "${_zmprovOut}";; # view class of services
 
                 2) printf "\
@@ -200,6 +204,23 @@ ${grant} global grp ${_group} +adminConsoleCreateTopDomainRights
                     #${grant} global grp ${_group} +countDomain
 
                 3) printf "\
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents COSListView
+${grant} global grp ${_group} +adminConsoleCOSRights
+${grant} global grp ${_group} +getCos
+${grant} global grp ${_group} +countCos
+${grant} global grp ${_group} +createCos
+${grant} global grp ${_group} +assignCos
+${grant} global grp ${_group} +listDomain
+${grant} global grp ${_group} +configureCosConstraint
+${grant} domain ${domain} grp ${_group} +listAccount
+${grant} global grp ${_group} +manageZimlet
+${grant} global grp ${_group} +listZimlet
+${grant} global grp ${_group} +getZimlet
+${grant} global grp ${_group} +listServer
+${grant} global grp ${_group} +getServer
+" >> "${_zmprovOut}";; # manage cos
+
+                4) printf "\
 mdl ${_group} ${opr}zimbraAdminConsoleUIComponents accountListView ${opr}zimbraAdminConsoleUIComponents aliasListView ${opr}zimbraAdminConsoleUIComponents resourceListView
 ${grant} domain ${domain} grp ${_group} +domainAdminAccountRights
 ${grant} domain ${domain} grp ${_group} +domainAdminConsoleAccountRights
@@ -222,26 +243,42 @@ ${grant} global grp ${_group} +getCos
 ${grant} global grp ${_group} +viewAdminConsoleDomainLimitsTab
 " >> "${_zmprovOut}";; # manage account
 
-                4) printf "\
+                5) printf "\
 mdl ${_group} ${opr}zimbraAdminConsoleUIComponents accountListView
 ${grant} zimlet com_zimbra_viewmail grp ${_group} getZimlet
 ${grant} zimlet com_zimbra_viewmail grp ${_group} listZimlet
 ${grant} domain ${domain} grp ${_group} +adminLoginAs
 " >> "${_zmprovOut}";; # view account
 
-                5) printf "\
+                6) printf "\
 mdl ${_group} ${opr}zimbraAdminConsoleUIComponents accountListView
 ${grant} domain ${domain} grp ${_group} +domainAdminConsoleAccountsFeaturesTabRights
 ${grant} domain ${domain} grp ${_group} +adminConsoleAccountsFeaturesTabRights
 " >> "${_zmprovOut}";; # enable or disable features
 
-                6) printf "\
+                7) printf "\
 mdl ${_group} ${opr}zimbraAdminConsoleUIComponents DLListView
 ${grant} domain ${domain} grp ${_group} +domainAdminConsoleDLRights
 ${grant} domain ${domain} grp ${_group} +domainAdminDistributionListRights
 ${grant} domain ${domain} grp ${_group} +countDistributionList
 ${grant} domain ${domain} grp ${_group} +listAccount
-" >> "${_zmprovOut}";;
+" >> "${_zmprovOut}";; # manage DL
+
+                8) printf "\
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents downloadsView ${opr}zimbraAdminConsoleUIComponents helpSearch ${opr}zimbraAdminConsoleUIComponents saveSearch
+${grant} zimlet com_zimbra_bulkprovision grp ${_group} getZimlet
+${grant} zimlet com_zimbra_bulkprovision grp ${_group} listZimlet
+${grant} domain ${domain} grp ${_group} +listAccount
+${grant} domain ${domain} grp ${_group} +listAlias
+${grant} domain ${domain} grp ${_group} +listDistributionList
+${grant} domain ${domain} grp ${_group} +countAccount
+${grant} domain ${domain} grp ${_group} +countAlias
+${grant} domain ${domain} grp ${_group} +countDistributionList
+${grant} domain ${domain} grp ${_group} +getAccount
+${grant} domain ${domain} grp ${_group} +getDistributionList
+${grant} domain ${domain} grp ${_group} +domainAdminConsoleSavedSearchRights
+${grant} domain ${domain} grp ${_group} +adminConsoleSavedSearchRights
+" >> "${_zmprovOut}";; # search & download
 
             esac
         done
