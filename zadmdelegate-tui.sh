@@ -104,17 +104,15 @@ selectTargetDomains() { # {{{
 
 selectRights() { # {{{
     local type_of_rights=(
-        'View_domain'
-        'View_class_of_services'
-        'View_accounts,_aliases,_and_resources'
-        'Manage_domain'
-        'Manage_class_of_services'
-        'Manage_accounts,_aliases,_and_resources'
-        'Can_enable_or_disable_accounts_features'
-        'Can_enable_or_disable_accounts_zimlets'
-        'Can_view_account'
-        'Can_change_accounts_quota'
-        'Global_search_and_download_(export)'
+        'View_Domain'
+        'View_Class_of_services'
+        'Manage_Domain'
+        'Manage_Account,_Aliases,_and_Resources'
+        '>__Can_view_account'
+        '>__Can_enable_or_disable_accounts_feature'
+        '>__Can_modify_accounts_quota#'
+        'Manage_Distribution_List'
+        'Global_Search_and_Download'
     )
 
     command dialog --clear --no-cancel --extra-button \
