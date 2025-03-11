@@ -125,4 +125,130 @@ selectRights() { # {{{
         command mapfile -d ' ' -t _rights < "${_dialogOut}"
 } # }}}
 
+actionChoosedRights() { # {{{
+    local action=${1}
+    local grant='revokeRight'
+    local opr='-'
+
+    if [[ ${action} -eq 0 ]]; then
+        grant='grantRight'
+        opr='+'
+        printf "mdl ${_group} zimbraIsAdminGroup TRUE zimbraMailStatus disabled zimbraHideInGal TRUE \n" \
+        >> "${_zmprovOut}"
+    fi
+
+    printf "\
+${grant} zimlet com_zimbra_delegatedadmin grp ${_group} +getZimlet
+${grant} zimlet com_zimbra_delegatedadmin grp ${_group} +listZimlet
+" >> "${_zmprovOut}"
+
+    for domain in "${_domains[@]}"; do
+        for right in "${_rights[@]}"; do
+            case ${right} in
+                0) printf "\
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents domainListView
+${grant} domain ${domain} grp ${_group} +accessGAL
+${grant} domain ${domain} grp ${_group} +adminConsoleDomainThemesTabRights
+${grant} domain ${domain} grp ${_group} +checkDomainMXRecord
+${grant} domain ${domain} grp ${_group} +configureWikiAccount
+${grant} domain ${domain} grp ${_group} +countAccount
+${grant} domain ${domain} grp ${_group} +countAlias
+${grant} domain ${domain} grp ${_group} +countCalendarResource
+${grant} domain ${domain} grp ${_group} +countDistributionList
+${grant} domain ${domain} grp ${_group} +getDomain
+${grant} domain ${domain} grp ${_group} +listAccount
+${grant} domain ${domain} grp ${_group} +listAlias
+${grant} domain ${domain} grp ${_group} +listCalendarResource
+${grant} domain ${domain} grp ${_group} +listDistributionList
+${grant} domain ${domain} grp ${_group} +listDomain
+${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainAuthenticationTab
+${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainDocumentsTab
+${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainFreebusyTab
+${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainGALTab
+${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainInfoTab
+${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainLimitsTab
+${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainVirtualHostsTab
+${grant} domain ${domain} grp ${_group} +getDomainQuotaUsage
+" >> "${_zmprovOut}";; # view domain
+                    #${grant} domain ${domain} grp ${_group} +countDomain
+
+                1) printf "\
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents COSListView
+${grant} global grp ${_group} +viewAdminConsoleCOSACLTab
+${grant} global grp ${_group} +viewAdminConsoleCOSAdvancedTab
+${grant} global grp ${_group} +viewAdminConsoleCOSFeaturesTab
+${grant} global grp ${_group} +viewAdminConsoleCOSInfoTab
+${grant} global grp ${_group} +viewAdminConsoleCOSMobileTab
+${grant} global grp ${_group} +viewAdminConsoleCOSPreferencesTab
+${grant} global grp ${_group} +viewAdminConsoleCOSServerPoolTab
+${grant} global grp ${_group} +viewAdminConsoleCOSThemesTab
+${grant} global grp ${_group} +viewAdminConsoleCOSZimletsTab
+${grant} global grp ${_group} +viewAdminConsoleResourcesPropertiesTab
+${grant} global grp ${_group} +listCos
+${grant} global grp ${_group} +getCalendarResourceInfo
+${grant} global grp ${_group} +getCos
+" >> "${_zmprovOut}";; # view class of services
+
+                2) printf "\
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents domainListView
+${grant} domain ${domain} grp ${_group} +adminConsoleDomainRights
+${grant} domain ${domain} grp ${_group} +domainAdminDomainRights
+${grant} domain ${domain} grp ${_group} +adminConsoleSubDomainRights
+${grant} domain ${domain} grp ${_group} +getDomainQuotaUsage
+${grant} global grp ${_group} +adminConsoleCreateTopDomainRights
+" >> "${_zmprovOut}";; # manage domain
+                    #${grant} global grp ${_group} +countDomain
+
+                3) printf "\
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents accountListView ${opr}zimbraAdminConsoleUIComponents aliasListView ${opr}zimbraAdminConsoleUIComponents resourceListView
+${grant} domain ${domain} grp ${_group} +domainAdminAccountRights
+${grant} domain ${domain} grp ${_group} +domainAdminConsoleAccountRights
+${grant} domain ${domain} grp ${_group} +domainAdminConsoleAccountsFreeBusyInteropTabRights
+${grant} domain ${domain} grp ${_group} +domainAdminConsoleAccountsThemesTabRights
+${grant} domain ${domain} grp ${_group} +domainAdminConsoleAccountsAliasesTabRights
+${grant} domain ${domain} grp ${_group} +domainAdminConsoleAliasRights
+${grant} domain ${domain} grp ${_group} +domainAdminConsoleDLAliasesTabRights
+${grant} domain ${domain} grp ${_group} +adminConsoleAliasRights
+${grant} domain ${domain} grp ${_group} +domainAdminConsoleRights
+${grant} domain ${domain} grp ${_group} +adminConsoleAccountRights
+${grant} domain ${domain} grp ${_group} +domainAdminCalendarResourceRights
+${grant} domain ${domain} grp ${_group} +domainAdminConsoleResourceRights
+${grant} domain ${domain} grp ${_group} +adminConsoleResourceRights
+${grant} domain ${domain} grp ${_group} +countCalendarResource
+${grant} domain ${domain} grp ${_group} +changeCalendarResourcePassword
+${grant} domain ${domain} grp ${_group} +modifyCalendarResource
+${grant} global grp ${_group} +assignCos
+${grant} global grp ${_group} +getCos
+${grant} global grp ${_group} +viewAdminConsoleDomainLimitsTab
+" >> "${_zmprovOut}";; # manage account
+
+                4) printf "\
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents accountListView
+${grant} zimlet com_zimbra_viewmail grp ${_group} getZimlet
+${grant} zimlet com_zimbra_viewmail grp ${_group} listZimlet
+${grant} domain ${domain} grp ${_group} +adminLoginAs
+" >> "${_zmprovOut}";; # view account
+
+                5) printf "\
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents accountListView
+${grant} domain ${domain} grp ${_group} +domainAdminConsoleAccountsFeaturesTabRights
+${grant} domain ${domain} grp ${_group} +adminConsoleAccountsFeaturesTabRights
+" >> "${_zmprovOut}";; # enable or disable features
+
+                6) printf "\
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents DLListView
+${grant} domain ${domain} grp ${_group} +domainAdminConsoleDLRights
+${grant} domain ${domain} grp ${_group} +domainAdminDistributionListRights
+${grant} domain ${domain} grp ${_group} +countDistributionList
+${grant} domain ${domain} grp ${_group} +listAccount
+" >> "${_zmprovOut}";;
+
+            esac
+        done
+    done
+
+    #command zmprov -vf "${_zmprovOut}" 2>&1 > "${_programLog}"
+    command zmprov -vf "${_zmprovOut}"
+} # }}}
+
 # vim:ft=bash:ts=4:sw=4:et
