@@ -49,7 +49,7 @@ trap '{ command rm -f "${_dialogOut}" "${_zmprovOut}"; }' EXIT
 _programLog=$(mktemp "${TMPDIR:-/tmp}/programLog.XXXXXX")
 [[ ! -f "${_programLog}" ]] && { exerr "Can't create programLog file"; }
 
-# 
+# Global variables
 _retval=0
 _rights=""
 _group=""
@@ -169,8 +169,8 @@ ${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainInfoTab
 ${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainLimitsTab
 ${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainVirtualHostsTab
 ${grant} domain ${domain} grp ${_group} +getDomainQuotaUsage
+${grant} domain ${domain} grp ${_group} +countDomain
 " >> "${_zmprovOut}";; # view domain
-                    #${grant} domain ${domain} grp ${_group} +countDomain
 
                 1) printf "\
 mdl ${_group} ${opr}zimbraAdminConsoleUIComponents COSListView
@@ -199,9 +199,9 @@ ${grant} domain ${domain} grp ${_group} +adminConsoleDomainRights
 ${grant} domain ${domain} grp ${_group} +domainAdminDomainRights
 ${grant} domain ${domain} grp ${_group} +adminConsoleSubDomainRights
 ${grant} domain ${domain} grp ${_group} +getDomainQuotaUsage
+${grant} global grp ${_group} +countDomain
 ${grant} global grp ${_group} +adminConsoleCreateTopDomainRights
 " >> "${_zmprovOut}";; # manage domain
-                    #${grant} global grp ${_group} +countDomain
 
                 3) printf "\
 mdl ${_group} ${opr}zimbraAdminConsoleUIComponents COSListView
@@ -210,14 +210,14 @@ ${grant} global grp ${_group} +getCos
 ${grant} global grp ${_group} +countCos
 ${grant} global grp ${_group} +createCos
 ${grant} global grp ${_group} +assignCos
-${grant} global grp ${_group} +listDomain
 ${grant} global grp ${_group} +configureCosConstraint
-${grant} domain ${domain} grp ${_group} +listAccount
 ${grant} global grp ${_group} +manageZimlet
 ${grant} global grp ${_group} +listZimlet
 ${grant} global grp ${_group} +getZimlet
 ${grant} global grp ${_group} +listServer
 ${grant} global grp ${_group} +getServer
+${grant} domain ${domain} grp ${_group} +listAccount
+${grant} domain ${domain} grp ${_group} +listDomain
 " >> "${_zmprovOut}";; # manage cos
 
                 4) printf "\
@@ -284,7 +284,6 @@ ${grant} domain ${domain} grp ${_group} +adminConsoleSavedSearchRights
         done
     done
 
-    #command zmprov -vf "${_zmprovOut}" 2>&1 > "${_programLog}"
     command zmprov -vf "${_zmprovOut}"
 } # }}}
 
