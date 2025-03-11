@@ -45,10 +45,6 @@ _zmprovOut=$(mktemp "${TMPDIR:-/tmp}/zmprovOut.XXXXXX")
 # Remove temporary file on exit
 trap '{ command rm -f "${_dialogOut}" "${_zmprovOut}"; }' EXIT
 
-# Log file
-_programLog=$(mktemp "${TMPDIR:-/tmp}/programLog.XXXXXX")
-[[ ! -f "${_programLog}" ]] && { exerr "Can't create programLog file"; }
-
 # Global variables
 _retval=0
 _rights=""
