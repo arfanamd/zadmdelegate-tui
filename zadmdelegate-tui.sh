@@ -287,4 +287,20 @@ ${grant} domain ${domain} grp ${_group} +adminConsoleSavedSearchRights
     command zmprov -vf "${_zmprovOut}"
 } # }}}
 
+# Main {{{
+selectAdministratorGroup
+[[ ${_retval} -ne 0 ]] && { exerr "_retval is non-zero"; }
+
+selectTargetDomains
+[[ ${_retval} -ne 0 ]] && { exerr "_retval is non-zero"; }
+[[ ${#_domains[@]} -eq 0 ]] && { info "Please select one or more domain from the list!"; exit; }
+
+selectRights
+[[ ${#_rights[@]} -eq 0 ]] && { info "Please select one or more right from the list!"; exit; }
+[[ ${_retval} -eq 0 ]] && actionChoosedRights 0
+[[ ${_retval} -eq 3 ]] && actionChoosedRights 1
+
+printf "${_retval} ${_group} ${_domains[@]} ${_rights[@]}\n"
+# }}}
+
 # vim:ft=bash:ts=4:sw=4:et
