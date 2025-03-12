@@ -76,10 +76,10 @@ selectAdministratorGroup() { # {{{
         | command sed -e '/^$/d;/^dn:/d;s/^.\+: //' \
     ))
 
-    command dialog --clear --no-items --menu "\
+    command dialog --clear --colors --no-items --menu "\
 Select the admin groups to which you want to grant or revoke access for one or more rules. \
-Only DL with zimbraIsAdminGroup attribute set to TRUE that gets listed in here. \
-\n\n Choose the groups:" ${_box_h} ${_box_w} ${#groups[@]} ${groups[@]} 2> "${_dialogOut}"
+Note that, only DL with \Zb\Z3zimbraIsAdminGroup\Zn attribute set to TRUE that gets listed \
+in here.\n\nChoose the group:\n\n" ${_box_h} ${_box_w} ${#groups[@]} ${groups[@]} 2> "${_dialogOut}"
 
     _retval=${?}
     command mapfile -d ' ' -t _group < "${_dialogOut}"
@@ -92,8 +92,9 @@ selectTargetDomains() { # {{{
         | command sed -e '/^$/d;/^dn:/d;s/^.\+: //' \
     ))
 
-    command dialog --clear --no-items --checklist \
-    "You can select one or more target domain for ${_group}" ${_box_h} ${_box_w} ${#domains[@]} \
+    command dialog --clear --colors --no-items --checklist \
+"You can select one or more target domain for \Zb\Z4${_group}\Zn.\n\n\Zb\Z3NOTE: Use \
+space button to toggle selection ON or OFF\Zn\n\n" ${_box_h} ${_box_w} ${#domains[@]} \
     $(for ((i = 0; i < ${#domains[@]}; ++i)); do printf "${domains[i]} off "; done) \
     2> "${_dialogOut}"
 
@@ -114,9 +115,10 @@ selectRights() { # {{{
         'Global_Search_and_Download'
     )
 
-    command dialog --clear --no-cancel --extra-button \
+    command dialog --clear --colors --no-cancel --extra-button \
         --ok-label "GRANT" --extra-label "REVOKE" --checklist \
-        "Select any rights for ${_group}:" ${_box_h} ${_box_w} ${#type_of_rights[@]} \
+"Select any rights for \Zb\Z4${_group}\Zn:\n\n\Zb\Z3NOTE: Use space button to toggle \
+selection ON or OFF\Zn\n\n" ${_box_h} ${_box_w} ${#type_of_rights[@]} \
         $(for ((i = 0; i < ${#type_of_rights[@]}; ++i)); do printf "${i} ${type_of_rights[i]} off "; done) \
         2> "${_dialogOut}"
 
