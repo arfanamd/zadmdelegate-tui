@@ -42,8 +42,8 @@ _dialogOut=$(mktemp "${TMPDIR:-/tmp}/dialogOut.XXXXXX")
 _zmprovOut=$(mktemp "${TMPDIR:-/tmp}/zmprovOut.XXXXXX")
 [[ ! -f "${_zmprovOut}" ]] && { exerr "Can't create zmprovOut temporary file"; }
 
-# Remove temporary file on exit
-trap '{ command rm -f "${_dialogOut}" "${_zmprovOut}"; }' EXIT
+# Remove temporary file and turn on the cursor back on exit
+trap '{ command rm -f "${_dialogOut}" "${_zmprovOut}"; tput cnorm; }' EXIT
 
 # Global variables
 _retval=0
@@ -62,6 +62,9 @@ _box_h=$(tput lines)
     export DIALOGRC="${PWD}/zadmdelegate-tui.rc"
 }
 export DIALOGTTY=1
+
+# make cursor invicible
+command tput civis
 
 # show message using dialog
 info() { command dialog --clear --msgbox "${1}" ${_box_h} ${_box_w}; }
