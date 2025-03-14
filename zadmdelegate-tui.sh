@@ -314,15 +314,16 @@ ${grant} global grp ${_group} +adminConsoleRights
         done
     done
 
+    command printf "Please wait...\n"
     command zmprov -vf "${_zmprovOut}"
 } # }}}
 
 # Main {{{
 selectAdministratorGroup
-[[ ${_retval} -ne 0 ]] && { exerr "_retval is non-zero"; }
+[[ ${_retval} -ne 0 ]] && { exerr "Canceling..."; }
 
 selectTargetDomains
-[[ ${_retval} -ne 0 ]] && { exerr "_retval is non-zero"; }
+[[ ${_retval} -ne 0 ]] && { exerr "Canceling..."; }
 [[ ${#_domains[@]} -eq 0 ]] && { info "Please select one or more domain from the list!"; exit; }
 
 selectRights
@@ -330,7 +331,7 @@ selectRights
 [[ ${_retval} -eq 0 ]] && actionChoosedRights 0
 [[ ${_retval} -eq 3 ]] && actionChoosedRights 1
 
-printf "${_retval} ${_group} ${_domains[@]} ${_rights[@]}\n"
+printf "[${_retval}|FINISHED] ${_group} ${_domains[@]} ${_rights[@]}\n"
 # }}}
 
 # vim:ft=bash:ts=4:sw=4:et
