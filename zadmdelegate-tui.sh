@@ -113,6 +113,9 @@ selectRights() { # {{{
         '>__Can_enable_or_disable_accounts_feature'
         'Manage_Distribution_List'
         'Global_Search_and_Download'
+        'Monitor_Server_status'
+        'Monitor_Mail_Queues_and_Server_Statistics'
+        'Almost_like_global_admin'
     )
 
     command dialog --clear --colors --no-cancel --extra-button \
@@ -280,6 +283,32 @@ ${grant} domain ${domain} grp ${_group} +getDistributionList
 ${grant} domain ${domain} grp ${_group} +domainAdminConsoleSavedSearchRights
 ${grant} domain ${domain} grp ${_group} +adminConsoleSavedSearchRights
 " >> "${_zmprovOut}";; # search & download
+
+                9) printf "\
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents globalServerStatusView
+${grant} global grp ${_group} +adminConsoleServerStatusRights
+" >> "${_zmprovOut}";; # server status
+
+                10) printf "\
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents perServerStatisticsView ${opr}zimbraAdminConsoleUIComponents mailQueue
+${grant} global grp ${_group} +adminConsoleServerStatisticRights
+${grant} global grp ${_group} +adminConsoleMailQueueRights
+" >> "${_zmprovOut}";; # mail queue & server statistic
+
+                11) printf "\
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents accountListView ${opr}zimbraAdminConsoleUIComponents DLListView
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents aliasListView ${opr}zimbraAdminConsoleUIComponents resourceListView
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents helpSearch ${opr}zimbraAdminConsoleUIComponents saveSearch
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents bulkProvisionTasksView ${opr}zimbraAdminConsoleUIComponents COSListView
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents domainListView ${opr}zimbraAdminConsoleUIComponents serverListView
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents zimletListView ${opr}zimbraAdminConsoleUIComponents adminZimletListView
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents globalConfigView ${opr}zimbraAdminConsoleUIComponents globalServerStatusView
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents mailQueue ${opr}zimbraAdminConsoleUIComponents backupsView
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents certsView ${opr}zimbraAdminConsoleUIComponents softwareUpdatesView
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents perServerStatisticsView ${opr}zimbraAdminConsoleUIComponents globalPermissionView
+mdl ${_group} ${opr}zimbraAdminConsoleUIComponents rightListView
+${grant} global grp ${_group} +adminConsoleRights
+" >> "${_zmprovOut}";; # almost like global admin
 
             esac
         done
