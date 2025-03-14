@@ -103,26 +103,22 @@ space button to toggle selection ON or OFF\Zn\n\n" ${_box_h} ${_box_w} ${#domain
 } # }}}
 
 selectRights() { # {{{
-    local type_of_rights=(
-        'View_Domain'
-        'View_Class_of_services'
-        'Manage_Domain'
-        'Manage_Class_of_services'
-        'Manage_Account,_Aliases,_and_Resources'
-        '>__Can_view_account'
-        '>__Can_enable_or_disable_accounts_feature'
-        'Manage_Distribution_List'
-        'Global_Search_and_Download'
-        'Monitor_Server_status'
-        'Monitor_Mail_Queues_and_Server_Statistics'
-        'Almost_like_global_admin'
-    )
-
     command dialog --clear --colors --no-cancel --extra-button \
         --ok-label "GRANT" --extra-label "REVOKE" --checklist \
 "Select any rights for \Zb\Z4${_group}\Zn:\n\n\Zb\Z3NOTE: Use space button to toggle \
-selection ON or OFF\Zn\n\n" ${_box_h} ${_box_w} ${#type_of_rights[@]} \
-        $(for ((i = 0; i < ${#type_of_rights[@]}; ++i)); do printf "${i} ${type_of_rights[i]} off "; done) \
+selection ON or OFF\Zn\n\n" ${_box_h} ${_box_w} 12 \
+        0  'View Domain' 'off' \
+        1  'View Class of services' 'off' \
+        2  'Manage Domain' 'off' \
+        3  'Manage Class of services' 'off' \
+        4  'Manage Account, Alias, and Resource' 'off' \
+        5  '+-> Can view account' 'off' \
+        6  '+-> Can enable/disable feature' 'off' \
+        7  'Manage Distribution list' 'off' \
+        8  'Global search, Save search, and Download' 'off' \
+        9  'Monitor Server status' 'off' \
+        A  'Monitor queue and statistics' 'off' \
+        B  'Almost like Global Admin' 'off' \
         2> "${_dialogOut}"
 
         _retval=${?}
@@ -289,13 +285,13 @@ mdl ${_group} ${opr}zimbraAdminConsoleUIComponents globalServerStatusView
 ${grant} global grp ${_group} +adminConsoleServerStatusRights
 " >> "${_zmprovOut}";; # server status
 
-                10) printf "\
+                A) printf "\
 mdl ${_group} ${opr}zimbraAdminConsoleUIComponents perServerStatisticsView ${opr}zimbraAdminConsoleUIComponents mailQueue
 ${grant} global grp ${_group} +adminConsoleServerStatisticRights
 ${grant} global grp ${_group} +adminConsoleMailQueueRights
 " >> "${_zmprovOut}";; # mail queue & server statistic
 
-                11) printf "\
+                B) printf "\
 mdl ${_group} ${opr}zimbraAdminConsoleUIComponents accountListView ${opr}zimbraAdminConsoleUIComponents DLListView
 mdl ${_group} ${opr}zimbraAdminConsoleUIComponents aliasListView ${opr}zimbraAdminConsoleUIComponents resourceListView
 mdl ${_group} ${opr}zimbraAdminConsoleUIComponents helpSearch ${opr}zimbraAdminConsoleUIComponents saveSearch
