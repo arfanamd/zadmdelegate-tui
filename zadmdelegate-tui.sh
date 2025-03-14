@@ -42,8 +42,12 @@ _dialogOut=$(mktemp "${TMPDIR:-/tmp}/dialogOut.XXXXXX")
 _zmprovOut=$(mktemp "${TMPDIR:-/tmp}/zmprovOut.XXXXXX")
 [[ ! -f "${_zmprovOut}" ]] && { exerr "Can't create zmprovOut temporary file"; }
 
-# Remove temporary file and turn on the cursor back on exit
-trap '{ command rm -f "${_dialogOut}" "${_zmprovOut}"; tput cnorm; }' EXIT
+# Revert every initialization modification for this program to run & clean up.
+trap '{
+    command rm -f "${_dialogOut}" "${_zmprovOut}"
+    tput cnorm
+    DIALOGRC="${OLD_DIALOGRC}"
+}' EXIT
 
 # Global variables
 _retval=0
