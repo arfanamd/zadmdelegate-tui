@@ -1,0 +1,21 @@
+Account List View               accountListView
+Distribution List View          DLListView
+Alias List View                 aliasListView 
+Resource List View             	resourceListView
+Help Search View                helpSearch 
+Saved Searches View             saveSearch 
+Account Migration               bulkProvisionTasksView
+Class of Service LIst View     	COSListView
+Domain List View                domainListView
+Server List View                serverListView
+Zimlet List View               	zimletListView
+Admin Zimlet List View          adminZimletListView 
+Global Settings View           	globalConfigView 
+Global Server Status View       globalServerStatusView 
+Mail Queue View                	mailQueue 
+Backups  View                  	backupsView 
+Certificates View              	certsView 
+Software Updates               	softwareUpdatesView
+Per Server Statistics View     	perServerStatisticsView 
+Global ACL View                	globalPermissionView 
+Right List View                 rightListView
