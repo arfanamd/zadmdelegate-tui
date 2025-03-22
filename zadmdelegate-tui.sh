@@ -173,7 +173,7 @@ ${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainInfoTab
 ${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainLimitsTab
 ${grant} domain ${domain} grp ${_group} +viewAdminConsoleDomainVirtualHostsTab
 ${grant} domain ${domain} grp ${_group} +getDomainQuotaUsage
-${grant} domain ${domain} grp ${_group} +countDomain
+${grant} global grp ${_group} +countDomain
 " >> "${_zmprovOut}";; # view domain
 
                 1) printf "\
